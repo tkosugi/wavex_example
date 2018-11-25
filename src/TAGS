@@ -1,0 +1,81 @@
+
+esc_seq/esc_seq_misc.cpp,35
+bool EscSeq::is_esc_seq_used 3,22
+
+mpi_util/mpiutil_collect.cpp,76
+using vector 4,44
+using cmplx 6,76
+void MPIUtil::collect_to_procs(11,204
+
+mpi_util/mpiutil_combine.cpp,76
+using vector 4,44
+using cmplx 6,76
+void MPIUtil::combine_from_all(11,216
+
+mpi_util/mpiutil_decomp.cpp,69
+using vector 4,44
+using cmplx 6,76
+void MPIUtil::decompose(14,269
+
+mpi_util/mpiutil_know.cpp,217
+using vector 4,44
+using cmplx 6,76
+void MPIUtil::let_all_know(11,195
+void MPIUtil::let_all_know(29,866
+void MPIUtil::let_all_know(43,1221
+void MPIUtil::let_all_know(54,1542
+void MPIUtil::let_other_know(76,2231
+
+mpi_util/mpiutil_misc.cpp,845
+using cmplx 3,22
+using string 4,58
+MPI_Datatype const MPIUtil::mpi_datatype<MPIUtil::mpi_datatype9,116
+MPI_Datatype const MPIUtil::mpi_datatype<MPIUtil::mpi_datatype12,193
+MPI_Datatype const MPIUtil::mpi_datatype<MPIUtil::mpi_datatype15,267
+MPI_Datatype const MPIUtil::mpi_datatype<MPIUtil::mpi_datatype18,343
+std::vector<EscSeq::property> const MPIUtil::es_prop 22,422
+void MPIUtil::init(25,533
+MPIUtil::communicator MPIUtil::comm_world(32,630
+MPIUtil::MPIUtil(43,777
+MPIUtil::MPIUtil(50,947
+int MPIUtil::get_myrank(60,1139
+int MPIUtil::get_nprocs(72,1325
+double MPIUtil::wtime(84,1499
+double MPIUtil::lapse(94,1628
+void MPIUtil::barrier(104,1758
+void MPIUtil::finalize(119,2097
+void MPIUtil::show_lapse(127,2244
+void MPIUtil::quit(133,2422
+int MPIUtil::find_among_ranks(141,2611
+void MPIUtil::show_info_distr(149,2879
+
+mpi_util/mpiutil_redistr.cpp,85
+using vector 5,45
+using cmplx 7,77
+void MPIUtil::redistr_according_to_vals(17,419
+
+mpi_util/mpiutil_sum.cpp,107
+using vector 4,44
+using cmplx 6,76
+void MPIUtil::sum_from_all(11,175
+void MPIUtil::sum_from_all(28,635
+
+omputil/omputil.cpp,154
+int OMPUtil::get_max_threads(4,23
+int OMPUtil::get_nthreads(13,131
+int OMPUtil::get_mythread(22,236
+std::tuple<int, int> OMPUtil::threads_info(31,340
+
+run_wavex/run_wavex.cpp,142
+  int const ndirs 12,151
+  int const spin_up 13,174
+  int const spin_dn 14,199
+int main(18,297
+std::vector<double> gen_k_points(111,3302
+
+strchar/strchar.cpp,145
+using string 3,22
+using vector 6,73
+void StrsToChars::read_stdin(10,159
+void StrsToChars::combine(21,397
+void StrsToChars::decompose(31,637
