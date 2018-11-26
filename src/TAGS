@@ -1,4 +1,51 @@
 
+binfile/binfile_misc.cpp,192
+template <typename T> using vector 3,22
+using string 4,75
+using cmplx 5,103
+BinFile::BinFile(8,141
+BinFile::~BinFile(20,416
+bool BinFile::is_available(25,452
+void BinFile::close(31,537
+
+binfile/binfile_read.cpp,244
+template <typename T> using vector 3,22
+using string 4,75
+using cmplx 5,103
+void BinFile::read(10,195
+void BinFile::read(16,289
+void BinFile::read(24,453
+void BinFile::read(45,1011
+void BinFile::read(57,1259
+void BinFile::read(71,1645
+
+binfile/binfile_skip.cpp,207
+template <typename T> using vector 3,22
+using string 4,75
+using cmplx 5,103
+void BinFile::skip_read(11,204
+void BinFile::skip_read(17,310
+void BinFile::skip_read(23,431
+void BinFile::skip_read(38,874
+
+binfile/binfile_w_or_r.cpp,150
+template <typename T> using vector 3,22
+using string 4,75
+using cmplx 5,103
+void BinFile::write_or_read(9,163
+void BinFile::write_or_read(28,704
+
+binfile/binfile_write.cpp,250
+template <typename T> using vector 3,22
+using string 4,75
+using cmplx 5,103
+void BinFile::write(10,194
+void BinFile::write(16,296
+void BinFile::write(23,453
+void BinFile::write(39,1010
+void BinFile::write(53,1544
+void BinFile::write(70,2209
+
 esc_seq/esc_seq_misc.cpp,35
 bool EscSeq::is_esc_seq_used 3,22
 
@@ -66,12 +113,12 @@ int OMPUtil::get_nthreads(13,131
 int OMPUtil::get_mythread(22,236
 std::tuple<int, int> OMPUtil::threads_info(31,340
 
-run_wavex/run_wavex.cpp,142
-  int const ndirs 12,151
-  int const spin_up 13,174
-  int const spin_dn 14,199
-int main(18,297
-std::vector<double> gen_k_points(111,3302
+run_wavex/run_wavex.cpp,136
+int const ndirs 13,172
+int const spin_up 14,193
+int const spin_dn 15,216
+int main(20,313
+std::vector<double> gen_k_points(130,3478
 
 strchar/strchar.cpp,145
 using string 3,22

@@ -7,20 +7,24 @@
 
 #include "mpiutil.h"
 #include "omputil.h"
+#include "binfile.h"
 #include "wavex.h"
 
-  int const ndirs = 3;
-  int const spin_up = 0;
-  int const spin_dn = 1;
+int const ndirs = 3;
+int const spin_up = 0;
+int const spin_dn = 1;
+
 
 std::vector<double> gen_k_points(std::array<int, ndirs> const& k_div);
 
 int main(int argc, char *argv[]){
   int const RANK_0 = 0;
 
-  // ad hoc!!!!!
-  std::array<int, ndirs> const k_div {4, 1, 1};
+  int const spin_up = 0;
+  int const spin_dn = 1;
 
+  std::string const prefix("test");
+  std::array<int, ndirs> const k_div {6, 1, 1};
 
   MPIUtil::init(argc, argv);
   MPIUtil mpi_util(MPIUtil::comm_world());
@@ -33,8 +37,13 @@ int main(int argc, char *argv[]){
   auto const k_point = gen_k_points(k_div);
   int const nkpts = k_point.size()/ndirs;
 
-  mpi_util.single_printf("=========================== calling WaveX ===========================\n");
+  if(nprocs != 6){
+    mpi_util.single_printf("This sample program assumes 6 MPI processes.\n");
+    mpi_util.finalize();
+    return 0;
+  }
 
+  mpi_util.single_printf("=========================== calling WaveX ===========================\n");
   mpi_util.single_printf("distribution pattern for two-electron integrals < k0 k1 | k2 k3 >\n");
 
   std::array<int, ndirs> nranks_k;
@@ -60,46 +69,55 @@ int main(int argc, char *argv[]){
   calc_twoel_Bloch_states<double>(suffix_twoel_for_WaveX, true, nranks_k);
   */
 
-
   WaveXParams wx;
+
+  auto read_dat = [&](std::string const& suffix, auto& dat){
+    BinFile f_in(prefix + suffix, BinFile::open_mode::read);
+    f_in.read(dat);
+  };
+
+  read_dat("_eval_up.dat", wx.eval[spin_up]);
+  read_dat("_eval_dn.dat", wx.eval[spin_dn]);
+
+  {
+    std::vector<std::vector<double>> occ_scf(2);
+    read_dat("_occ_up.dat", occ_scf[spin_up]);
+    read_dat("_occ_dn.dat", occ_scf[spin_dn]);
+    for(int isp: {spin_up, spin_dn}){
+      wx.occ_int[isp].resize(occ_scf[isp].size());
+      for(int i = 0; i < occ_scf[isp].size(); i++){
+        wx.occ_int[isp][i] = static_cast<int>(std::round(occ_scf[isp][i]));
+      }
+    }
+  }
 
   wx.k_point = k_point;
   wx.is_one_comp_pol = 1;
-  /*
-  wx.eval[spin_up] = eval_scf[spin_up];
-  wx.eval[spin_dn] = eval_scf[spin_dn];
-  wx.occ_int[spin_up] = occ_int[spin_up];
-  wx.occ_int[spin_dn] = occ_int[spin_dn];
-  wx.verbose = params.wavex_verbose;
-  wx.nbands_occ_omitted = params.wavex_nbands_occ_omitted;
-  wx.nbands_vir_omitted = params.wavex_nbands_vir_omitted;
-  */
+  wx.verbose = 0;
+  wx.nbands_occ_omitted = 0;
+  wx.nbands_vir_omitted = 0;
   wx.kp_to_calc = -1;
-  /*
-  wx.are_t_ampls_read = params.wavex_are_t_ampls_read;
-  wx.iter_max_ccsd = params.wavex_iter_max_ccsd;
-  wx.eps_dt_ccsd = params.wavex_eps_dt_ccsd;
-  wx.smear_t1_ccsd = params.wavex_smear_t1_ccsd;
-  wx.smear_t2_ccsd = params.wavex_smear_t2_ccsd;
-  wx.mix_ratio_ccsd = params.wavex_mix_ratio_ccsd;
-  wx.conv_ene_ccsd = params.wavex_conv_ene_ccsd;
-  wx.are_ampls_written = params.wavex_are_ampls_written;
-  wx.conv_ampl_lambda = params.wavex_conv_ampl_lambda;
-  wx.is_gf_calc = params.wavex_is_gf_calc;
-  wx.omega_min = params.wavex_omega_min;
-  wx.omega_max = params.wavex_omega_max;
-  wx.nomegas = params.wavex_nomegas;
-  wx.omega_eta = params.wavex_omega_eta;
-  wx.are_eom_mat_written = params.wavex_are_eom_mat_written;
-  wx.are_diag_comps_gf_only = params.wavex_are_diag_comps_gf_only;
-  wx.is_from_beginning = params.wavex_is_from_beginning ? 1: 0;
+  wx.are_t_ampls_read = 0;
+  wx.iter_max_ccsd = 150;
+  wx.eps_dt_ccsd = 0.0;
+  wx.smear_t1_ccsd = 0.0;
+  wx.smear_t2_ccsd = 0.0;
+  wx.mix_ratio_ccsd = 1.0;  
+  wx.conv_ene_ccsd = 1.e-7;
+  wx.are_ampls_written = 1;
+  wx.conv_ampl_lambda = 1.e-10;
+  wx.is_gf_calc = 1;
+  wx.omega_min = -1.5;
+  wx.omega_max = 1.5;
+  wx.nomegas = 400;
+  wx.omega_eta = 0.01;
+  wx.are_eom_mat_written = 0;
+  wx.are_diag_comps_gf_only = 1;
+  wx.is_from_beginning = 1;
 
   wx.start();
 
-  */
-
   mpi_util.single_printf("======================== returned from WaveX ========================\n");
-
 
   mpi_util.show_lapse();
   mpi_util.finalize();
