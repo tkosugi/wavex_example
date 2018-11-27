@@ -113,12 +113,62 @@ int OMPUtil::get_nthreads(13,131
 int OMPUtil::get_mythread(22,236
 std::tuple<int, int> OMPUtil::threads_info(31,340
 
-run_wavex/run_wavex.cpp,136
-int const ndirs 13,172
-int const spin_up 14,193
-int const spin_dn 15,216
-int main(20,313
-std::vector<double> gen_k_points(130,3478
+readlines/readlines_load.cpp,125
+using string 3,24
+using vector 6,75
+bool ReadLines::load(13,220
+bool ReadLines::load(30,534
+bool ReadLines::load(35,652
+
+readlines/readlines_misc.cpp,756
+using string 3,24
+using vector 6,75
+void ReadLines::close(25,611
+bool ReadLines::operator++(31,683
+bool ReadLines::operator++(42,834
+bool ReadLines::operator+=(ReadLines::operator+=47,897
+bool ReadLines::operator--(55,1020
+bool ReadLines::operator--(66,1160
+bool ReadLines::operator-=(ReadLines::operator-=71,1223
+int ReadLines::get_pos(79,1346
+bool ReadLines::set_pos(85,1432
+string ReadLines::line_here(98,1670
+bool ReadLines::is_end_reached(105,1906
+vector<string> ReadLines::strs_here(111,2021
+int ReadLines::nstrs_present(117,2156
+void ReadLines::ignore_substr(123,2302
+void ReadLines::ignore_substr(129,2463
+void ReadLines::clear_ignored_substrs(135,2611
+void ReadLines::get_strs_present(141,2724
+void ReadLines::print(148,2859
+
+readlines/readlines_read.cpp,131
+using string 3,24
+using vector 6,75
+void ReadLines::read(10,146
+void ReadLines::read(16,314
+void ReadLines::adopt_line(21,443
+
+readlines/readlines_seek.cpp,186
+using string 3,24
+using vector 6,75
+bool ReadLines::seek_from_top(14,326
+bool ReadLines::seek_from_here(38,936
+bool ReadLines::seek_within(63,1594
+bool ReadLines::seek_str(92,2348
+
+readlines/readlines_split.cpp,78
+using string 3,24
+using vector 6,75
+vector<string> ReadLines::split(10,187
+
+run_wavex/run_wavex.cpp,165
+int const ndirs 14,195
+int const spin_up 15,216
+int const spin_dn 16,239
+int main(22,438
+std::vector<double> gen_k_points(116,3292
+void read_occ_eval(140,3905
 
 strchar/strchar.cpp,145
 using string 3,22

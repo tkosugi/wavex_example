@@ -33,12 +33,9 @@ class MPIUtil{
 
   static int const RANK_0 = 0;
 
-#ifdef MPI_USED
-  template <typename T> static MPI_Datatype const mpi_datatype;
-#endif
-
  public:
 #ifdef MPI_USED
+  template <typename T> static MPI_Datatype const mpi_datatype;
   static bool const is_mpi_used = true;
 
   using communicator = MPI_Comm;

@@ -8,34 +8,34 @@
 #include "mpiutil.h"
 #include "omputil.h"
 #include "binfile.h"
+#include "readlines.h"
 #include "wavex.h"
 
 int const ndirs = 3;
 int const spin_up = 0;
 int const spin_dn = 1;
 
-
 std::vector<double> gen_k_points(std::array<int, ndirs> const& k_div);
+void read_occ_eval(std::string const& fname_in, std::vector<double>& eval, std::vector<double>& occ);
+
 
 int main(int argc, char *argv[]){
   int const RANK_0 = 0;
 
-  int const spin_up = 0;
-  int const spin_dn = 1;
-
   std::string const prefix("test");
   std::array<int, ndirs> const k_div {6, 1, 1};
 
-  MPIUtil::init(argc, argv);
-  MPIUtil mpi_util(MPIUtil::comm_world());
-
-  int const myrank = mpi_util.myrank;
-  int const nprocs = mpi_util.nprocs;
-
-  mpi_util.single_printf("%d OpenMP threads in each of %d MPI processes\n\n", OMPUtil::get_max_threads(), nprocs);
-
   auto const k_point = gen_k_points(k_div);
   int const nkpts = k_point.size()/ndirs;
+
+  MPIUtil::init(argc, argv);
+  MPIUtil mpi_util(MPIUtil::comm_world());
+  int const nprocs = mpi_util.nprocs;
+
+  EscSeq::is_esc_seq_used = false;
+
+  mpi_util.single_printf("sample program of calling WaveX for CCSD and GF of a Be chain\n");
+  mpi_util.single_printf("%d OpenMP threads in each of %d MPI processes\n\n", OMPUtil::get_max_threads(), nprocs);
 
   if(nprocs != 6){
     mpi_util.single_printf("This sample program assumes 6 MPI processes.\n");
@@ -63,30 +63,17 @@ int main(int argc, char *argv[]){
   }
   mpi_util.single_printf("\n");
 
-
-  /*  
-  // Calculate two-electron integrals according to the specified distribution pattern.
-  calc_twoel_Bloch_states<double>(suffix_twoel_for_WaveX, true, nranks_k);
-  */
-
   WaveXParams wx;
-
-  auto read_dat = [&](std::string const& suffix, auto& dat){
-    BinFile f_in(prefix + suffix, BinFile::open_mode::read);
-    f_in.read(dat);
-  };
-
-  read_dat("_eval_up.dat", wx.eval[spin_up]);
-  read_dat("_eval_dn.dat", wx.eval[spin_dn]);
 
   {
     std::vector<std::vector<double>> occ_scf(2);
-    read_dat("_occ_up.dat", occ_scf[spin_up]);
-    read_dat("_occ_dn.dat", occ_scf[spin_dn]);
+    read_occ_eval(prefix + "_eval_occ_up.txt", wx.eval[spin_up], occ_scf[spin_up]);
+    read_occ_eval(prefix + "_eval_occ_dn.txt", wx.eval[spin_dn], occ_scf[spin_dn]);
+
     for(int isp: {spin_up, spin_dn}){
       wx.occ_int[isp].resize(occ_scf[isp].size());
       for(int i = 0; i < occ_scf[isp].size(); i++){
-        wx.occ_int[isp][i] = static_cast<int>(std::round(occ_scf[isp][i]));
+	wx.occ_int[isp][i] = static_cast<int>(std::round(occ_scf[isp][i]));
       }
     }
   }
@@ -147,4 +134,29 @@ std::vector<double> gen_k_points(std::array<int, ndirs> const& div){
   }
 
   return k_point;
+}
+
+
+void read_occ_eval(std::string const& fname_in, std::vector<double>& eval, std::vector<double>& occ){
+  ReadLines f_in;
+  f_in.load(fname_in, "#");
+
+  int const nkpts = f_in[0];
+  int const nbands = f_in[1];
+  f_in++;
+
+  eval.clear();
+  eval.resize(nkpts*nbands);
+
+  occ.clear();
+  occ.resize(nkpts*nbands);
+
+  for(int ik = 0; ik < nkpts; ik++){
+    for(int ib = 0; ib < nbands; ib++){
+      int const ind = ik*nbands + ib;
+      eval[ind] = f_in[0];
+      occ[ind] = f_in[1];
+      f_in++;
+    }
+  }
 }

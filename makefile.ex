@@ -1,13 +1,13 @@
 CFLAG_OPTIM := -O3
 
 NODE_NAME := $(shell uname -n)
-ifeq (${NODE_NAME}, sekirei1)
-	CC_SERIAL := g++
-	CC_MPI := g++
-	CFLAG_OMP := -fopenmp
-	CFLAG_OTHER := -std=c++1z
-	LIB_OTHER_COMMON := -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lgfortran
-	LIB_OTHER_MPI := -lmpi_mt -lmpigf
+ifeq (${NODE_NAME}, fh01p04)
+	CC_SERIAL := FCCpx
+	CC_MPI := mpiFCCpx
+	CFLAG_OMP := -Kopenmp
+	CFLAG_OTHER := -std=c++14 -Xg
+	LIB_OTHER_COMMON := -SSL2BLAMP
+	LIB_OTHER_MPI := --linkfortran
 else
 	CC_SERIAL := gcc-7.1
 	CC_MPI := mpicxx
