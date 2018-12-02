@@ -167,8 +167,8 @@ int const ndirs 14,195
 int const spin_up 15,216
 int const spin_dn 16,239
 int main(22,438
-std::vector<double> gen_k_points(116,3292
-void read_occ_eval(140,3905
+std::vector<double> gen_k_points(116,3293
+void read_occ_eval(140,3906
 
 strchar/strchar.cpp,145
 using string 3,22

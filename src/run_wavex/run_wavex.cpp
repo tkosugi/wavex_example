@@ -98,7 +98,7 @@ int main(int argc, char *argv[]){
   wx.omega_max = 1.5;
   wx.nomegas = 400;
   wx.omega_eta = 0.01;
-  wx.are_eom_mat_written = 0;
+  wx.are_eom_mats_written = 0;
   wx.are_diag_comps_gf_only = 1;
   wx.is_from_beginning = 1;
 
